@@ -3,13 +3,14 @@ from pydantic import BaseModel
 
 class AdminCreate(BaseModel):
     name : str
-    username : str
+    email : str
     password : str
 
 
 class AdminResponse(BaseModel):
-    id : int
-    name : str
+    email : str
+    password : str
+    role_id : int
 
     class Config:
         orm_mode = True

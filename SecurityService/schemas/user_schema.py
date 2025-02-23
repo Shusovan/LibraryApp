@@ -1,20 +1,19 @@
+import email
 from pydantic import BaseModel
 
+
 class UserBase(BaseModel):
-    username: str
+    email: str
 
 class UserCreate(UserBase):
     password: str
     role_id: int
 
 class UserResponse(UserBase):
-    id: int
-    username: str
-    role_name: str
+    email: str
+    password: str
+    role_id: int
 
-class AssignRoleRequest(UserBase):
-    username: str
-    role_name: str    # Role name should be predefined in the `Role` table
-
-    class Config:
-        orm_mode = True
+class UserLogin(UserBase):
+    email: str
+    password: str

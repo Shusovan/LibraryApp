@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
 from database.db_connection import Base
+from sqlalchemy.orm import relationship
+
 
 class Admin(Base):
 
@@ -10,6 +12,12 @@ class Admin(Base):
     
     name = Column(String, index=True)
     
-    username = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
     
     password = Column(String, nullable=False)
+
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable=False)  # Role assigned to user
+
+
+    # Relationship with Role table
+    role = relationship("Role", back_populates="admin")

@@ -8,7 +8,7 @@ def create_admin(db: Session, admin_data: AdminCreate):
     
     hashed_password = hash_password(admin_data.password)
     
-    db_admin = Admin(name=admin_data.name, username=admin_data.username, password=hashed_password)
+    db_admin = Admin(name=admin_data.name, email=admin_data.email, password=hashed_password)
     db.add(db_admin)
     db.commit()
     db.refresh(db_admin)
@@ -16,6 +16,10 @@ def create_admin(db: Session, admin_data: AdminCreate):
     return db_admin
 
 
-def get_admin_by_username(db: Session, username: str):
+def get_all_admins(db: Session):
+    return db.query(Admin).all()
 
-    return db.query(Admin).filter(Admin.username == username).first()
+
+def get_admin_by_email(db: Session, email: str):
+
+    return db.query(Admin).filter(Admin.email == email).first()
