@@ -10,6 +10,7 @@ class UserCreate(UserBase):
     role_id: int
 
 class UserResponse(UserBase):
+    id : int
     email: str
     password: str
     role_id: int

@@ -26,32 +26,35 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 """
 def authenticate_user(email: str, password: str):
     
-    # Fetch admin credentials
+    # Fetch admin data
     admin_data = fetch_admin(email)
     
     if not admin_data:
         raise HTTPException(status_code=404, detail="Admin not found")
 
-    received_password = admin_data.get("password")
+    # extract the admin credentials required for authentication
+    stored_password = admin_data.get("password")
     role_id = admin_data.get("role_id")
+    admin_id = admin_data.get("id")
 
 
-    # Fetch role name using role_id
+    # Fetch role data
     role_data = fetch_role(role_id)
     
     if not role_data:
         raise HTTPException(status_code=404, detail="Role not found")
     
+    # extract the role name from the role id
     role_name = role_data.get("name")
 
 
-    # Verify password
-    if not verify_password(password, received_password):
+    # Verify password (given password with stored password)
+    if not verify_password(password, stored_password):
         raise HTTPException(status_code=401, detail="Invalid password")
 
 
     # Generate JWT token with user details
-    access_token = create_token(data={"sub": email, "role": role_name})
+    access_token = create_token(data={"sub": email, "role": role_name, "id" : admin_id})
 
 
     return {"access_token": access_token, "token_type": "bearer"}

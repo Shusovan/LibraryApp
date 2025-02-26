@@ -21,6 +21,7 @@ def initialize_data(db : session):
         # If the role doesn't exist, create it
         if not existing_role:
             new_role = Role(name=role_name)
+            
             db.add(new_role)
             db.commit()                             # Commit the transaction to persist the role
             db.refresh(new_role)                    # Refresh the instance to get the auto-generated id
@@ -40,7 +41,7 @@ def initialize_data(db : session):
 
     if not super_admin:
         
-        super_admin = Admin(name="Super Admin", email="superadmin@example.com", password=hash_password("superadmin@123"), role_id=super_admin_id)
+        super_admin = Admin(name="Super Admin", email="superadmin@example.com", password=hash_password("superadmin@123"), created_by=0, modified_by=0, role_id=super_admin_id)
         
         db.add(super_admin)
         db.commit()
