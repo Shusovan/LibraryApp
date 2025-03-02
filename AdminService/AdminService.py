@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 from dotenv import load_dotenv
-from api.routes import admin_routes, role_routes
+from api.routes import admin_routes, librarian_routes, role_routes
 from database.data_initializer import initialize_data
 from database.db_connection import SessionLocal, engine, Base
 
@@ -23,9 +23,11 @@ startup_event()
 
 app = FastAPI(title="AdminService", version="1.0")
 
-app.include_router(role_routes.router, prefix="/admin-service", tags=["admin"])
+app.include_router(role_routes.router, prefix="/admin-service", tags=["role"])
 
 app.include_router(admin_routes.router, prefix="/admin-service", tags=["admin"])
+
+app.include_router(librarian_routes.router, prefix="/admin-service", tags=["librarian"])
 
 
 @app.get("/")

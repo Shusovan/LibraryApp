@@ -1,4 +1,4 @@
-import email
+from uuid import UUID
 from pydantic import BaseModel
 
 
@@ -10,7 +10,7 @@ class UserCreate(UserBase):
     role_id: int
 
 class UserResponse(UserBase):
-    id : int
+    id : UUID
     email: str
     password: str
     role_id: int

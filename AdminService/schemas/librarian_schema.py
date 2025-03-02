@@ -3,13 +3,13 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class AdminCreate(BaseModel):
+class LibrarianCreate(BaseModel):
     name : str
     email : str
     password : str
 
 
-class AdminResponse(BaseModel):
+class LibrarianResponse(BaseModel):
     id : UUID
     email : str
     password : str

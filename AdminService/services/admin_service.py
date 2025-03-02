@@ -22,7 +22,6 @@ def create_admin(db: Session, admin_data: AdminCreate, request: Request):
 
     admin_role = db.query(Role).filter(Role.name == "ADMIN").first()
 
-    # query databse for admin using email and fetch the nameS
 
     if not admin_role:
         raise HTTPException(status_code=500, detail="ADMIN role not found")

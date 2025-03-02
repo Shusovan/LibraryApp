@@ -58,7 +58,7 @@ def authenticate_token(request: Request):
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Token missing or invalid")
 
-    token = auth_header.split("Bearer ")[1]
+    token = auth_header.split("Bearer ")[-1]
     payload = verify_token(token)  # Call the existing function
 
     if not payload:

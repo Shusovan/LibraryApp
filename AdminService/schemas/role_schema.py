@@ -12,10 +12,10 @@ class RoleResponse(RoleBase):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class RoleNameResponse(RoleBase):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True

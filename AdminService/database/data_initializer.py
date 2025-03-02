@@ -1,4 +1,3 @@
-import email
 from sqlalchemy.orm import session
 
 from models.admin import Admin
@@ -41,7 +40,7 @@ def initialize_data(db : session):
 
     if not super_admin:
         
-        super_admin = Admin(name="Super Admin", email="superadmin@example.com", password=hash_password("superadmin@123"), created_by=0, modified_by=0, role_id=super_admin_id)
+        super_admin = Admin(name="Super Admin", email="superadmin@example.com", password=hash_password("superadmin@123"), created_by=None, modified_by=None, role_id=super_admin_id)
         
         db.add(super_admin)
         db.commit()

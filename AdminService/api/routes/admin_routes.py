@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from schemas.admin_schema import AdminCreate, AdminResponse
-from services.admin_service_impl import create_admin, get_admin_by_email, get_all_admins
+from services.admin_service import create_admin, get_admin_by_email, get_all_admins
 from database.db_connection import get_db
 
 

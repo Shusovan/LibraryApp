@@ -6,12 +6,12 @@
     "configurations": [
 
         {
-            "name": "Python Debugger: SecurityService",
+            "name": "SecurityService",
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "security_service:app",
+                "SecurityService:app",
                 "--reload"
             ],
             "jinja": true

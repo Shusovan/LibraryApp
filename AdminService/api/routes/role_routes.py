@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database.db_connection import get_db
 from models.role import Role
 from schemas.role_schema import RoleCreate, RoleNameResponse, RoleResponse
-from services.role_service_impl import get_role_by_id
+from services.role_service import get_role_by_id
 
 
 router = APIRouter()

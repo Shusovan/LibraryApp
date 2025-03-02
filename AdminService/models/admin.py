@@ -1,4 +1,5 @@
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
+import uuid
+from sqlalchemy import UUID, Boolean, Column, DateTime, ForeignKey, Integer, String
 from database.db_connection import Base
 from datetime import datetime
 from sqlalchemy.orm import relationship
@@ -9,7 +10,7 @@ class Admin(Base):
     __tablename__ = "admins"
 
 
-    id = Column(Integer, primary_key = True, index = True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
     
     name = Column(String, index = True)
     
@@ -17,9 +18,9 @@ class Admin(Base):
     
     password = Column(String, nullable = False)
 
-    created_by = Column(Integer, nullable = False)
+    created_by = Column(UUID(as_uuid=True), nullable = True)
 
-    modified_by = Column(Integer, nullable = False)
+    modified_by = Column(UUID(as_uuid=True), nullable = True)
 
     created_date = Column(DateTime, default = datetime.now())
 
