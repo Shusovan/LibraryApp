@@ -41,4 +41,20 @@ def get_all_books(db: Session, request: Request):
         raise HTTPException(status_code=403, detail="Forbidden: Only LIBRARIAN can fetch all book details")
 
     return db.query(Book).all()
+
+
+def find_book_by_bookid(bookid: str, db: Session, request: Request):
+
+    auth_header = request.headers.get("Authorization")
+    user_data = validate_token(auth_header)  # Call SecurityService
     
+    # Check if the user is LIBRARIAN
+    if user_data.get("role") != "LIBRARIAN":
+        raise HTTPException(status_code=403, detail="Forbidden: Only LIBRARIAN can fetch all book details")
+
+    book = db.query(Book).filter(Book.book_id == bookid).first()
+    
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    
+    return book
