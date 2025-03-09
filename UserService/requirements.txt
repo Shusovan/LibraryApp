@@ -46,3 +46,4 @@ websockets==14.2
 loguru==0.7.2
 psycopg2
 kafka-python
+passlib

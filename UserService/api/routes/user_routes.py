@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
@@ -18,7 +19,7 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
 
 
 # get user by their email id
-@router.get("/get-user/{email}", response_model=UserResponse)
+@router.get("/get-user/{email}", response_model=Optional[UserResponse])
 def get_user_by_email(email: str, db: Session = Depends(get_db)):
 
     return db.query(User).filter(User.email == email).first()

@@ -32,6 +32,6 @@ def consume_kafka():
             print("⚠️ Missing user_id or email in event data!")
 
 # Run Kafka consumer in a separate thread
-kafka_thread = threading.Thread(target=consume_kafka, daemon=True)
-kafka_thread.start()
+#kafka_thread = threading.Thread(target=consume_kafka, daemon=True)
+#kafka_thread.start()
 

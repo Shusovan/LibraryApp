@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from api.routes import admin_routes, librarian_routes, role_routes
 from database.data_initializer import initialize_data
 from database.db_connection import SessionLocal, engine, Base
-from event import kafka_consumer
+from event.kafka_consumer import consume_kafka
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -32,21 +32,22 @@ app.include_router(admin_routes.router, prefix="/admin-service", tags=["admin"])
 app.include_router(librarian_routes.router, prefix="/admin-service", tags=["librarian"])
 
 
-'''def start_kafka_consumer():
-    """Function to start Kafka Consumer in a separate thread."""
-    kafka_consumer()'''
-
-'''@app.on_event("startup")
-def startup_kafka_event():
-    """Run Kafka Consumer when FastAPI starts."""
-    thread = threading.Thread(target=start_kafka_consumer, daemon=True)
-    thread.start()
-    print("🚀 Kafka Consumer started in a background thread.")'''
-
-
 @app.get("/")
 def read_root():
     return {"message": "Admin Service is running!"}
+
+
+# Run Kafka consumer in a separate thread when the app starts
+def start_kafka_consumer():
+    kafka_thread = threading.Thread(target=consume_kafka, daemon=True)
+    kafka_thread.start()
+
+
+# Start Kafka after Uvicorn starts
+@app.on_event("startup")
+def on_startup():
+    print("🚀 AdminService has started... Initializing Kafka consumer.")
+    start_kafka_consumer()
 
 
 if __name__ == "__main__":

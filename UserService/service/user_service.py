@@ -3,11 +3,14 @@ from sqlalchemy.orm import Session
 from event import kafka_producer
 from model.user import User
 from schema.user_schema import UserCreate
+from security.encrypt import hash_password
 
 
 def create_user(db: Session, user_data: UserCreate):
 
-    user = User(firstname=user_data.firstname, lastname=user_data.lastname, email=user_data.email, password=user_data.password)
+    encypted_password = hash_password(user_data.password)
+
+    user = User(firstname=user_data.firstname, lastname=user_data.lastname, email=user_data.email, password=encypted_password)
 
     db.add(user)
     db.commit()

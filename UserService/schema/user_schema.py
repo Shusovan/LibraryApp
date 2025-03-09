@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -12,12 +13,12 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     # id : int
-    # user_id : int
+    user_id : Optional[int] = None
     firstname : str
     lastname : str
     created_date : datetime
     #modified_date : datetime
-    # status : str
+    status : str
     # role_id: int
 
 # Only expecting a message field
