@@ -1,5 +1,6 @@
 import uuid
-from sqlalchemy import UUID, Boolean, Column, DateTime, Integer, String, Enum, func
+from sqlalchemy import UUID, Boolean, Column, DateTime, ForeignKey, Integer, String, Enum, func
+from sqlalchemy.orm import relationship
 
 from database.db_connection import Base
 from model.user_status import UserStatus
@@ -31,3 +32,9 @@ class User(Base):
     status = Column(Enum(UserStatus, native_enum=False), default=UserStatus.PENDING.value)
 
     is_deleted = Column(Boolean, default = False)
+
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable = False)
+
+
+    # Relationship with Role table
+    role = relationship("Role", back_populates = "user")

@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 from pydantic import BaseModel
 
 
@@ -19,7 +20,14 @@ class UserResponse(UserBase):
     created_date : datetime
     #modified_date : datetime
     status : str
-    # role_id: int
+    # role: str
+
+# for internal service communication
+class UserLoginResponse(UserBase):
+    password : str
+    user_id : Optional[int] = None
+    status : str
+    role_id: int
 
 # Only expecting a message field
 class UserRegistrationResponse(BaseModel):
@@ -27,3 +35,8 @@ class UserRegistrationResponse(BaseModel):
 
 class UserLogin(UserBase):
     password: str
+
+class ApproveUserRequest(BaseModel):
+    user_id: int
+    status: str
+    verified_by: UUID  # Who approved the user (e.g., Librarian)

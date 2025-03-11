@@ -9,8 +9,15 @@ class UserCreate(UserBase):
     password: str
     role_id: int
 
-class UserResponse(UserBase):
+class AdminResponse(UserBase):
     id : UUID
+    email: str
+    password: str
+    role_id: int
+
+class UserResponse(UserBase):
+    # id : UUID
+    user_id: int
     email: str
     password: str
     role_id: int
