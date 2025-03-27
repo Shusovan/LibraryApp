@@ -22,6 +22,8 @@ class Book(Base):
 
     # genre = Column(String, nullable=False)
 
+    # catagory = Column(String, nullable=False)           # NORMAL, EXCLUSIVE
+
     created_by = Column(UUID(as_uuid=True), nullable=False)
 
     modified_by = Column(UUID(as_uuid=True), nullable=False)

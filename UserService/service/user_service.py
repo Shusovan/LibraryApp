@@ -21,7 +21,7 @@ def create_user(db: Session, user_data: UserCreate):
     db.refresh(user)
 
     # Publish Kafka Event
-    kafka_producer.send_event("user.registered", {"user_id": user.id, "email": user.email})
+    # kafka_producer.send_event("user.registered", {"user_id": user.id, "email": user.email})
 
     return {"message": "Your form has been submitted successfully. After validation, you will be able to access the library."}
 

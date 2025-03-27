@@ -37,7 +37,7 @@ def get_all_books(db: Session, request: Request):
     user_data = validate_token(auth_header)  # Call SecurityService
     
     # Check if the user is LIBRARIAN
-    if user_data.get("role") != "LIBRARIAN":
+    if user_data.get("role") != "LIBRARIAN" and user_data.get("role") != "USER":
         raise HTTPException(status_code=403, detail="Forbidden: Only LIBRARIAN can fetch all book details")
 
     return db.query(Book).all()
@@ -49,7 +49,7 @@ def find_book_by_bookid(bookid: str, db: Session, request: Request):
     user_data = validate_token(auth_header)  # Call SecurityService
     
     # Check if the user is LIBRARIAN
-    if user_data.get("role") != "LIBRARIAN":
+    if user_data.get("role") != "LIBRARIAN" and user_data.get("role") != "USER":
         raise HTTPException(status_code=403, detail="Forbidden: Only LIBRARIAN can fetch all book details")
 
     book = db.query(Book).filter(Book.book_id == bookid).first()
@@ -58,3 +58,23 @@ def find_book_by_bookid(bookid: str, db: Session, request: Request):
         raise HTTPException(status_code=404, detail="Book not found")
     
     return book
+
+
+def update_availability(book_id: str, db: Session):
+    
+    book = db.query(Book).filter(Book.book_id == book_id).first()
+
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+
+    if book.available_copies <= 0:
+        raise HTTPException(status_code=400, detail="No copies available")
+
+    book.available_copies -= 1  # Correct way to decrement
+
+    db.commit()
+    db.refresh(book)
+
+    print("Available Books:", book.available_copies)
+
+    return {"Available Books": book.available_copies}

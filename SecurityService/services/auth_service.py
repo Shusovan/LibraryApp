@@ -11,23 +11,24 @@ from security.jwt_utils import create_token
 # Create a password hashing context with Argon2
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
-"""
-    Verifies a plain password against a hashed password.
-"""
-def verify_password(plain_password: str, hashed_password: str) -> bool:
 
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Verifies a plain password against a hashed password.
+    """
     return pwd_context.verify(plain_password, hashed_password)
 
 
-"""
+
+def authenticate_admin(email: str, password: str):
+    """
     Authenticates the admin by verifying email and password.
     Fetches admin details from AdminService and generates JWT.
 
     Returns:
         dict: JWT access token if authentication is successful.
-"""
-def authenticate_admin(email: str, password: str):
-    
+    """
+
     # Fetch admin data
     admin_data = fetch_admin(email)
     

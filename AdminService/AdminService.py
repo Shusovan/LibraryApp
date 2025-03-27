@@ -38,16 +38,16 @@ def read_root():
 
 
 # Run Kafka consumer in a separate thread when the app starts
-def start_kafka_consumer():
-    kafka_thread = threading.Thread(target=consume_kafka, daemon=True)
-    kafka_thread.start()
+# def start_kafka_consumer():
+#     kafka_thread = threading.Thread(target=consume_kafka, daemon=True)
+#     kafka_thread.start()
 
 
 # Start Kafka after Uvicorn starts
-@app.on_event("startup")
-def on_startup():
-    print("🚀 AdminService has started... Initializing Kafka consumer.")
-    start_kafka_consumer()
+# @app.on_event("startup")
+# def on_startup():
+#     print("🚀 AdminService has started... Initializing Kafka consumer.")
+#     start_kafka_consumer()
 
 
 if __name__ == "__main__":

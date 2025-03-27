@@ -9,26 +9,6 @@ load_dotenv()
 # SecurityService URL (for inter-service communication)
 SECURITY_SERVICE_URL = os.getenv("SECURITY_SERVICE_URL")
 
-'''
-def validate_token(auth_header: str):
-    """
-    Request SecurityService for token verification
-    """
-
-    if not auth_header:
-        raise HTTPException(status_code=401, detail="Authorization header missing")
-
-    headers = {"Authorization": auth_header}
-    response = requests.post(f"{SECURITY_SERVICE_URL}/authenticate-token", headers=headers, timeout=3)
-
-    if requests.Timeout:
-        raise Exception("Request to Security Service timed out")
-
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="Invalid or expired token")
-
-    return response.json()'''
-
 
 def validate_token(auth_header: str):
     """
