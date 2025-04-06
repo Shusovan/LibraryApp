@@ -60,21 +60,38 @@ def find_book_by_bookid(bookid: str, db: Session, request: Request):
     return book
 
 
-def update_availability(book_id: str, db: Session):
+def update_availability(book_id: str, borrow_data: dict, db: Session):
+
+    # extract status from payload
+    status = borrow_data.get("status")
+
+    if not status:
+        raise HTTPException(status_code=400, detail="Status not provided")
     
+    # find book by book id provided
     book = db.query(Book).filter(Book.book_id == book_id).first()
 
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
 
-    if book.available_copies <= 0:
-        raise HTTPException(status_code=400, detail="No copies available")
+    # borrow books
+    if status == "BORROWED":
+        
+        if book.available_copies == 0:
+            raise HTTPException(status_code=400, detail="No copies available to borrow")
+        
+        book.available_copies -= 1
 
-    book.available_copies -= 1  # Correct way to decrement
+    # return book
+    elif status == "RETURNED":
+        book.available_copies += 1
+
+    else:
+        raise HTTPException(status_code=400, detail="Invalid status.")
 
     db.commit()
     db.refresh(book)
 
-    print("Available Books:", book.available_copies)
+    print("Updated Available Books:", book.available_copies)
 
-    return {"Available Books": book.available_copies}
+    return {"available_copies": book.available_copies}

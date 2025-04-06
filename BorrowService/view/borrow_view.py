@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 import uuid
-from fastapi import Depends, HTTPException, Request
+from fastapi import HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import Optional
 
@@ -10,7 +10,7 @@ from config.book_client import fetch_book, update_book
 from config.security_client import validate_token
 # from event.kafka_producer import send_event
 from model.borrow import BorrowRecords
-from model.borrow_status import BookStatus
+from model.borrow_status import BorrowStatus
 
 
 def borrow(request: Request, db: Session, book_id: str):
@@ -81,7 +81,7 @@ def approved_borrow(request_id: str, approval_data: dict, db: Session):
     book_id = borrow_data.book_id
 
     try:
-        borrow_data.status = BookStatus[approval_data["status"]]  # Convert string to enum
+        borrow_data.status = BorrowStatus[approval_data["status"]]  # Convert string to enum
 
     except KeyError:
         raise HTTPException(status_code=400, detail=f"Invalid status value: {approval_data['status']}")
@@ -90,7 +90,7 @@ def approved_borrow(request_id: str, approval_data: dict, db: Session):
     db.refresh(borrow_data)
 
     # Decrement available copies in BookService
-    update_book_availability = update_book(book_id)
+    update_book_availability = update_book(book_id, status=borrow_data.status.value)
 
     if not update_book_availability:
         raise HTTPException(status_code=500, detail="Failed to update book availability")
@@ -98,3 +98,51 @@ def approved_borrow(request_id: str, approval_data: dict, db: Session):
     print(f"Message: Your book borrow request is {borrow_data.status.value}")
 
     return {"message": f"Your book borrow request is {borrow_data.status.value}"}
+
+
+def book_return(request: Request, db: Session, book_id: str):
+
+    auth_header = request.headers.get("Authorization")
+    user_data = validate_token(auth_header)  # Call SecurityService
+    
+    if user_data.get("role") != "USER":
+        raise HTTPException(status_code=403, detail="Only USERS can borrow books")
+    
+    user_id = user_data.get("id")
+    
+    # fetch bokk of a particular user
+    borrow_data = db.query(BorrowRecords).filter(BorrowRecords.book_id==book_id, BorrowRecords.user_id==user_id).first()
+
+    if not borrow_data:
+        raise HTTPException(status_code=404, detail="You didn't borrow this book")
+
+    borrow_data.status = BorrowStatus.RETURNED
+
+    db.commit()
+    db.refresh(borrow_data)
+
+    # increment available copies in BookService
+    update_book_availability = update_book(book_id, status=borrow_data.status.value)
+
+    return {"message": f"Book {book_id} returned successfully",
+            "book_status": borrow_data.status.value,
+            "book_service_response": update_book_availability}
+
+
+def borrowed_books(request: Request, db: Session):
+
+    auth_header = request.headers.get("Authorization")
+    user_data = validate_token(auth_header)  # Call SecurityService
+    
+    if user_data.get("role") != "USER":
+        raise HTTPException(status_code=403, detail="Only USERS can borrow books")
+    
+    user_id = user_data.get("id")
+
+    # fetch borrowed books of logged-in user user
+    borrow_data = db.query(BorrowRecords).filter(BorrowRecords.user_id==user_id).first()
+
+    return borrow_data
+
+
+# include function to check the due_date and impose the fine

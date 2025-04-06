@@ -37,8 +37,8 @@ def get_book_by_bookid(bookid: str, request: Request, db: Session = Depends(get_
 
 
 @router.put("/update-available-copies/{book_id}")
-def update_available_copies(book_id: str, db: Session = Depends(get_db)):
+def update_available_copies(book_id: str, borrow_data: dict, db: Session = Depends(get_db)):
     """
     Update book availability
     """
-    return update_availability(book_id, db)
+    return update_availability(book_id, borrow_data, db)

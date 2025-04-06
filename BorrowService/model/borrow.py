@@ -1,9 +1,8 @@
-from datetime import date, timedelta
+import datetime
 import uuid
-from sqlalchemy import UUID, Column, DateTime, Enum, Integer, String
+from sqlalchemy import UUID, Column, Date, Enum, Integer, String
 from core.db_connection import Base
-from model import borrow_status
-from model.borrow_status import BookStatus
+from model.borrow_status import BorrowStatus
 
 
 class BorrowRecords(Base):
@@ -19,13 +18,18 @@ class BorrowRecords(Base):
 
     request_id = Column(UUID(as_uuid=True), index=True, unique=True, nullable=False)
 
-    borrow_date = Column(DateTime)
+    borrow_date = Column(Date)
 
-    return_date = Column(DateTime)
+    # mark this as due_date
+    return_date = Column(Date)
 
-    status = Column(Enum(BookStatus, native_enum=False), default=BookStatus.PENDING.value)
+    # return_date = Column(DateTime)
+
+    status = Column(Enum(BorrowStatus, native_enum=False), default=BorrowStatus.PENDING.value)
 
     # approval_required = Column(String, nullable=True)      # approval for EXCLUSIVE books only
 
+    # update after due_date is crossed
+    # compare return_date and due_date, get the fine value ($5/day)
     # fine = Column(Integer, nullable = True, default = None)
 

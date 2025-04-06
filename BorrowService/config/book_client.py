@@ -32,13 +32,13 @@ def fetch_book(book_id: str, auth_header: str):
         return None
     
 
-def update_book(book_id):
+def update_book(book_id, status: str):
     '''
     update BookService for available_copies
     '''
 
     try:
-        response = requests.put(f"{BOOK_SERVICE_URL}/update-available-copies/{book_id}", timeout=30)
+        response = requests.put(f"{BOOK_SERVICE_URL}/update-available-copies/{book_id}", json={"status": status}, timeout=30)
         
         if response.status_code == 200:
             return response.json()  # Return book details as a dictionary

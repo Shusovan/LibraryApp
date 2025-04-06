@@ -1,7 +1,7 @@
 from enum import Enum as PyEnum
 
 
-class BookStatus(PyEnum):
+class BorrowStatus(PyEnum):
     
     PENDING = "PENDING"
     BORROWED = "BORROWED"

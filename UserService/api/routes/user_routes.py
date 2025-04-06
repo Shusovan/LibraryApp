@@ -35,5 +35,7 @@ def user_details(email: str, db: Session = Depends(get_db)):
 # Updates the user’s status and assigns the generated 8-digit user ID.
 @router.put("/users/approve/{email}")
 def approve_user(email: str, user_data: dict, db: Session = Depends(get_db)):
-
+    '''
+    Updates the user’s status and assigns the generated 8-digit user ID.
+    '''
     return user_approved(email, user_data, db)

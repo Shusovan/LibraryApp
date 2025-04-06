@@ -51,6 +51,9 @@ def approve_user(email: str, current_user: dict = Depends(get_current_user)):
     # Generate a random 8-digit user ID
     user_id = random.randint(10000000, 99999999)
 
+    # secrets.randbelow() provides cryptographic security
+    # user_id = secrets.randbelow(90000000) + 10000000 
+
     # Update the user status in UserService
     success = user_approved_response(email, user_id, current_user_id)
 
@@ -76,7 +79,6 @@ def approve_borrow(request_id: str, current_user: dict = Depends(get_current_use
     '''
     Approve book borrow requested by user
     '''
-
     if current_user["role"] != "LIBRARIAN":
         raise HTTPException(status_code=403, detail="Only librarians can approve users")
     
