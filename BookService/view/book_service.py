@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from config.security_client import validate_token
 from model.book import Book
+from model.genre import Genre
 from schema.book_schema import BookCreate
 
 
@@ -17,14 +18,40 @@ def create_book(db: Session, book_data: BookCreate, request: Request):
     if user_data.get("role") != "LIBRARIAN":
         raise HTTPException(status_code=403, detail="Forbidden: Only LIBRARIAN can add books")
     
+    # Check if the same book already exists (by name and author)
+    existing_book = db.query(Book).filter(
+        Book.book_name == book_data.book_name,
+        Book.author == book_data.author
+    ).first()
+
+    if existing_book:
+        raise HTTPException(status_code=400, detail="Book already exists")
+    
 
     # book_id logic (generates automatically)
     short_uuid = str(uuid.uuid4()).replace("-", "")[:6]
 
-
-    book = Book(book_id=short_uuid, book_name=book_data.book_name, book_description=book_data.book_description, author=book_data.author, available_copies=book_data.available_copies, created_by=user_data.get("id"), modified_by=user_data.get("id"))
+    book = Book(book_id=short_uuid, book_name=book_data.book_name, book_description=book_data.book_description, author=book_data.author, available_copies=book_data.available_copies, catagory="NORMAL", created_by=user_data.get("id"), modified_by=user_data.get("id"))
     
     db.add(book)
+    
+    # Process each genre name
+    genres_list = []
+    for genre_name in book_data.genres:
+        # Try to find existing genre
+        genre = db.query(Genre).filter(Genre.name == genre_name).first()
+        
+        # If not found, create it
+        if not genre:
+            genre = Genre(name=genre_name)
+            db.add(genre)
+            db.flush()  # Get ID without committing yet
+        
+        genres_list.append(genre)
+    
+    # Link genres to book
+    book.genres = genres_list
+
     db.commit()
     db.refresh(book)
     

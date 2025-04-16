@@ -1,5 +1,8 @@
 from datetime import datetime
+from typing import List
 from pydantic import BaseModel
+
+from schema.genre_schema import GenreResponse
 
 
 class BookCreate(BaseModel):
@@ -7,6 +10,7 @@ class BookCreate(BaseModel):
     book_description : str
     author : str
     available_copies : int
+    genres: List[str]
 
 
 class BookResponse(BaseModel):
@@ -15,6 +19,8 @@ class BookResponse(BaseModel):
     book_description : str
     author : str
     available_copies : int
+    genres: List[GenreResponse]
+    catagory: str
     # created_by : UUID
     # modified_by : UUID
     created_date : datetime

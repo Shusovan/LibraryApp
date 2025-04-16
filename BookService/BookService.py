@@ -3,6 +3,9 @@ from fastapi import FastAPI
 from api.routes import book_routes
 from database.db_connection import engine, Base
 
+# this triggers the imports of all models
+from model import central_model_registry
+
 
 # Create database tables
 Base.metadata.create_all(bind=engine)

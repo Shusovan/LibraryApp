@@ -1,6 +1,9 @@
 from datetime import datetime
 from sqlalchemy import UUID, Boolean, Column, DateTime, Integer, String
 from database.db_connection import Base
+from sqlalchemy.orm import relationship
+
+from model.book_genre import BookGenre
 
 
 class Book(Base):
@@ -22,7 +25,7 @@ class Book(Base):
 
     # genre = Column(String, nullable=False)
 
-    # catagory = Column(String, nullable=False)           # NORMAL, EXCLUSIVE
+    catagory = Column(String, nullable=False)           # NORMAL, EXCLUSIVE
 
     created_by = Column(UUID(as_uuid=True), nullable=False)
 
@@ -33,3 +36,6 @@ class Book(Base):
     modified_date = Column(DateTime, default = datetime.now())
 
     is_deleted = Column(Boolean, default = False)
+
+
+    genres = relationship("Genre", secondary=BookGenre.__tablename__, back_populates="books")

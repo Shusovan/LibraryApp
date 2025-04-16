@@ -138,6 +138,7 @@ venv.bak/
 book-venv/
 user-venv/
 borrow-venv/
+bookinsights-venv/
 
 # Spyder project settings
 .spyderproject
