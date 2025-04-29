@@ -45,12 +45,11 @@ Implements role-based access control (RBAC).
 
 
 Notable Features :-
-JWT authentication using a centralized SecurityService.
 
-Role-based access for users and admins.
+1. JWT authentication using a centralized SecurityService.
 
-Kafka-based event system for borrow approvals and inter-service communication.
+2. Role-based access for users and admins.
 
-Clean, modular structure suitable for scaling and integrating AI services.
+3. Clean, modular structure suitable for scaling and integrating AI services.
 
-Future integration planned for book description generation and smart genre tagging using Generative AI.
+4. Future integration planned for book description generation and smart genre tagging using Generative AI.
