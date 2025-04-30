@@ -1,5 +1,6 @@
 Library Management Application – Overview
-Your Library Management Application is an enterprise-grade microservices-based system built using FastAPI. It streamlines the processes of managing books, users, borrowing, and administration in a library environment. The application is divided into multiple services, each with a dedicated responsibility, ensuring modularity and scalability.
+
+Library Management Application is an enterprise-grade microservices-based system built using FastAPI. It streamlines the processes of managing books, users, borrowing, and administration in a library environment. The application is divided into multiple services, each with a dedicated responsibility, ensuring modularity and scalability.
 
 Key Microservices -
 
